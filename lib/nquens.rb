@@ -1,15 +1,38 @@
 class Nquens
 
   def initialize(quens)
-    @board = [
-      [1,0,0,0],
-      [0,0,1,0],
-      [0,0,0,0],
-      [0,0,0,0]
-    ]
-    @board.each { |line| puts "#{line}" }
+    @board = []
+    quens.times do |i|
+        @board[i] = Array.new(quens, false)
+    end
 
-    puts "Places line 0: #{places(3)}"
+    if done?(0)
+      @board.each do |line|
+        line.each { |item| print item ? ' * ' : ' - ' }
+        puts
+      end
+      return @board
+    end
+    puts "Invalid input."
+  end
+
+  def done?(line)
+    if line == @board.length()
+      return true
+    end
+
+    @board.length().times do |column|
+
+      if available?(line, column)
+        @board[line][column] = true
+        if done?(line + 1)
+          return true
+        end
+        @board[line][column] = false
+      end
+    end
+    false
+
   end
 
   def places(line)
@@ -30,15 +53,19 @@ class Nquens
     options = [[1,1],[-1,-1],[-1,1],[1,-1]]
 
     @board.length.times do |i|
-      if @board[i][x] != 0
+      if @board[y][i]
+        return false
+      end
+
+      if @board[i][x]
         return false
       end
 
       options.each do |option|
         changed_y = y + ((i+1) * option[0])
         changed_x = x + ((i+1) * option[1])
-        if changed_x <= quens && changed_y <= quens
-          if @board[changed_y][changed_x] != 0
+        if changed_x <= quens && changed_y <= quens && changed_x >= 0 && changed_y >= 0
+          if @board[changed_y][changed_x]
             return false
           end
         end
@@ -49,7 +76,3 @@ class Nquens
   end
 
 end
-
-print "Número de rainhas: "
-quens = gets
-Nquens.new(quens.to_i)
