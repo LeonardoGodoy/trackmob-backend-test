@@ -1,22 +1,24 @@
-class Nquens
+class Nqueens
 
-  def initialize(quens)
+  def self.nqueens(queens)
     @board = []
-    quens.times do |i|
-        @board[i] = Array.new(quens, false)
+    queens.times do |i|
+        @board[i] = Array.new(queens, false)
     end
 
+    result = ""
     if done?(0)
       @board.each do |line|
-        line.each { |item| print item ? ' * ' : ' - ' }
-        puts
+        line.each { |item| result << (item ? '*' : '-')}
+        result << "\n"
       end
-      return @board
+      return result
     end
-    puts "Invalid input."
+
+    return "Invalid input."
   end
 
-  def done?(line)
+  def self.done?(line)
     if line == @board.length()
       return true
     end
@@ -35,24 +37,13 @@ class Nquens
 
   end
 
-  def places(line)
-    available_places = []
+  def self.available?(y, x)
 
-    @board.length.times do |i|
-      if available?(line, i)
-        available_places.push [line, i]
-      end
-    end
-
-    available_places
-  end
-
-  def available?(y, x)
-
-    quens = @board.length() -1
+    queens = @board.length() -1
     options = [[1,1],[-1,-1],[-1,1],[1,-1]]
 
     @board.length.times do |i|
+      #strat new thread
       if @board[y][i]
         return false
       end
@@ -64,7 +55,7 @@ class Nquens
       options.each do |option|
         changed_y = y + ((i+1) * option[0])
         changed_x = x + ((i+1) * option[1])
-        if changed_x <= quens && changed_y <= quens && changed_x >= 0 && changed_y >= 0
+        if changed_x <= queens && changed_y <= queens && changed_x >= 0 && changed_y >= 0
           if @board[changed_y][changed_x]
             return false
           end

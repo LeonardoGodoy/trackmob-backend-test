@@ -4,7 +4,9 @@ class Parentesis
     times = input.length / 2
     times.times do
       input = input.gsub("()", "").gsub("[]", "").gsub("{}", "")
-      return true if input.length == 0
+      if input.length == 0
+        return true 
+      end
     end
     false
   end
